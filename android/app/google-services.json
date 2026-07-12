@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "802368686218",
+    "project_id": "fitlens-816b5",
+    "storage_bucket": "fitlens-816b5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802368686218:android:1ec1b81cdb0d3d9a1dc573",
+        "android_client_info": {
+          "package_name": "com.example.fitlens"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl15ewh1mCfGBCHlh4SLyGlIyJHStImWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
