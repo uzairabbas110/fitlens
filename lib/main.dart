@@ -5,6 +5,7 @@ import 'core/widgets/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'features/authentication/presentation/screens/login_screen.dart';
+import 'core/router/app_router.dart';
 // Entry point of the FitLens app
 void main() async {
   // Ensures Flutter's engine and widget bindings are initialized
@@ -31,13 +32,13 @@ class FitLensApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       // Removes the debug banner in the top-right corner
       debugShowCheckedModeBanner: false,
       title: 'FitLens',
       // Simple placeholder home screen to confirm the app runs
       // after Firebase initialization (no auth or business logic here)
-      home: const LoginScreen(),
+      routerConfig: appRouter,
     );
   }
 }
