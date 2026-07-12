@@ -15,12 +15,14 @@ class SignupScreen extends ConsumerStatefulWidget {
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -31,6 +33,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final success = await ref.read(authControllerProvider.notifier).signUp(
+      fullName: _nameController.text,
       email: _emailController.text,
       password: _passwordController.text,
     );
@@ -39,7 +42,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Account created successfully!')),
       );
-      context.go('/home'); // back to login
+      context.go('/home');
     }
   }
 
@@ -64,6 +67,20 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
                 const SizedBox(height: 32),
 
+                // Full Name
+                AuthTextField(
+                  controller: _nameController,
+                  labelText: 'Full Name',
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Full Name is required';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Email
                 AuthTextField(
                   controller: _emailController,
                   labelText: 'Email',
@@ -72,7 +89,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     if (value == null || value.trim().isEmpty) {
                       return 'Email is required';
                     }
-                    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                    final emailRegex =
+                    RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
                     if (!emailRegex.hasMatch(value.trim())) {
                       return 'Enter a valid email address';
                     }
@@ -81,6 +99,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
                 const SizedBox(height: 16),
 
+                // Password
                 AuthTextField(
                   controller: _passwordController,
                   labelText: 'Password',
@@ -97,6 +116,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
                 const SizedBox(height: 16),
 
+                // Confirm Password
                 AuthTextField(
                   controller: _confirmPasswordController,
                   labelText: 'Confirm Password',

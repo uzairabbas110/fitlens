@@ -54,12 +54,17 @@ class AuthController extends Notifier<AuthState> {
   }
 
   Future<bool> signUp({
+    required String fullName,
     required String email,
     required String password,
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      await _authRepository.signUp(email: email, password: password);
+      await _authRepository.signUp(
+        fullName: fullName,
+        email: email,
+        password: password,
+      );
       state = state.copyWith(isLoading: false);
       return true;
     } catch (e) {

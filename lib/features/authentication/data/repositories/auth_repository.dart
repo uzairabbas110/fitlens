@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitlens/features/profile/data/models/user_model.dart';
 // Repository that wraps all FirebaseAuth operations.
 // Keeping Firebase logic here (not in UI) makes the app easier to test and maintain.
 class AuthRepository {
@@ -32,14 +33,27 @@ class AuthRepository {
 
   // Creates a new account with email and password
   Future<void> signUp({
+    required String fullName,
     required String email,
     required String password,
   }) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
+
+      final user = UserModel(
+        uid: credential.user!.uid,
+        fullName: fullName,
+        email: email.trim(),
+      );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .set(user.toMap());
+
     } on FirebaseAuthException catch (e) {
       throw _mapFirebaseError(e);
     }
