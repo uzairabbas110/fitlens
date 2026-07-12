@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'core/widgets/splash_screen.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'features/authentication/presentation/screens/login_screen.dart';
 // Entry point of the FitLens app
 void main() async {
   // Ensures Flutter's engine and widget bindings are initialized
@@ -16,7 +18,11 @@ void main() async {
   );
 
   // Runs the app only after Firebase has been successfully initialized
-  runApp(const FitLensApp());
+  runApp(
+    const ProviderScope(
+      child: FitLensApp(),
+    ),
+  );
 }
 
 // Root widget of the FitLens app
@@ -31,7 +37,7 @@ class FitLensApp extends StatelessWidget {
       title: 'FitLens',
       // Simple placeholder home screen to confirm the app runs
       // after Firebase initialization (no auth or business logic here)
-      home: const SplashScreen(),
+      home: const LoginScreen(),
     );
   }
 }
