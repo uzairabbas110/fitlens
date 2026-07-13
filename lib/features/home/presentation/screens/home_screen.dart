@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../widgets/feature_card.dart';
 import '../widgets/welcome_header.dart';
+import '../../../upload/presentation/screens/upload_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -52,7 +53,12 @@ class HomeScreen extends StatelessWidget {
               subtitle: "Upload your outfit and get AI feedback",
               icon: Icons.camera_alt,
               onTap: () {
-                context.go('/upload');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const UploadScreen(),
+                  ),
+                );
               },
             ),
             SizedBox(height: 15),

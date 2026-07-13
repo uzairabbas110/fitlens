@@ -20,15 +20,10 @@ class FeatureCard extends StatelessWidget {
       elevation: 3,
       child: ListTile(
         onTap: onTap,
-        leading: Icon(
-          icon,
-          size: 35,
-        ),
+        leading: Icon(icon, size: 35),
         title: Text(
           title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.arrow_forward_ios),
