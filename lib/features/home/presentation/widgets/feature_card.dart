@@ -4,12 +4,14 @@ class FeatureCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+  final VoidCallback? onTap;
 
   const FeatureCard({
     super.key,
     required this.title,
     required this.subtitle,
     required this.icon,
+    this.onTap,
   });
 
   @override
@@ -17,6 +19,7 @@ class FeatureCard extends StatelessWidget {
     return Card(
       elevation: 3,
       child: ListTile(
+        onTap: onTap,
         leading: Icon(
           icon,
           size: 35,

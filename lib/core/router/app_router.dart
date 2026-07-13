@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/authentication/presentation/screens/login_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import 'package:fitlens/features/upload/presentation/screens/upload_screen.dart';
 
 final appRouter = GoRouter(
   redirect: (context, state) {
@@ -27,6 +28,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/upload',
+      builder: (context, state) => const UploadScreen(),
     ),
   ],
 );

@@ -47,12 +47,14 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            const FeatureCard(
+            FeatureCard(
               title: "Analyze Outfit",
               subtitle: "Upload your outfit and get AI feedback",
               icon: Icons.camera_alt,
+              onTap: () {
+                context.go('/upload');
+              },
             ),
-
             SizedBox(height: 15),
 
             const FeatureCard(
