@@ -1,0 +1,115 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: Is the caller authenticated?
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper: Is the caller the owner of this document?
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Helper: Ensure client does NOT modify protected subscription/role fields
+    function doesNotModifyProtectedFields() {
+      let protectedFields = [
+        'isPremium',
+        'premiumPlan',
+        'premiumSince',
+        'role',
+        'status',
+        'scheduledPermanentDeletionAt',
+        'deletionRequestedAt',
+        'lastTransaction',
+        'credits'
+      ];
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(protectedFields);
+    }
+
+    // =========================================================================
+    // 1. Users Collection (/users/{userId})
+    // =========================================================================
+    match /users/{userId} {
+      // Allow user to read their own profile
+      allow read: if isOwner(userId);
+
+      // On creation (Signup): Client can set basic profile, but isPremium MUST be false or absent
+      allow create: if isOwner(userId) 
+        && (!('isPremium' in request.resource.data) || request.resource.data.isPremium == false)
+        && (!('role' in request.resource.data) || request.resource.data.role == 'user');
+
+      // On update: Client cannot modify isPremium, role, status, or subscription metadata
+      allow update: if isOwner(userId) && doesNotModifyProtectedFields();
+
+      // Deletion: User can only delete their own doc
+      allow delete: if isOwner(userId);
+
+      // --- Subcollection: History (/users/{userId}/history/{historyId}) ---
+      match /history/{historyId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // --- Subcollection: Measurements (/users/{userId}/measurements/{measurementId}) ---
+      match /measurements/{measurementId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // --- Subcollection: Transactions (/users/{userId}/transactions/{txnId}) ---
+      // Read-only for client. Writes must originate from server-side admin SDK.
+      match /transactions/{txnId} {
+        allow read: if isOwner(userId);
+        allow write: if false; 
+      }
+    }
+
+    // =========================================================================
+    // 2. Closet Items Collection (/closet_items/{itemId})
+    // =========================================================================
+    match /closet_items/{itemId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // =========================================================================
+    // 3. Color Analysis Collection (/color_analysis/{userId})
+    // =========================================================================
+    match /color_analysis/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // =========================================================================
+    // 4. Stylist Chats Collection (/stylist_chats/{chatId})
+    // =========================================================================
+    match /stylist_chats/{chatId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // =========================================================================
+    // 5. Social Posts Collection (/social_posts/{postId})
+    // =========================================================================
+    match /social_posts/{postId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // =========================================================================
+    // 6. AI Response Cache (/ai_cache/{cacheKey})
+    // =========================================================================
+    match /ai_cache/{cacheKey} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() 
+        && request.resource.data.keys().hasOnly(['response', 'timestamp']);
+    }
+
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

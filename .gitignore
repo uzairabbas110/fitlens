@@ -18,9 +18,22 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
+# Environment Variables & Secrets (CRITICAL: Never commit)
+.env
+.env.*
+*.env
+*.local
+node_modules/
+key.properties
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+service-account*.json
+*firebase-adminsdk*.json
+
+# VS Code
 #.vscode/
 
 # Flutter/Dart/Pub related

@@ -1,16 +1,14 @@
 
-
 import '../../domain/entities/selected_image_entity.dart';
 import '../../domain/repositories/image_picker_repository.dart';
 import '../datasources/image_picker_datasource.dart';
 
-// Concrete implementation of ImagePickerRepository.
 class ImagePickerRepositoryImpl implements ImagePickerRepository {
   final ImagePickerDataSource _dataSource;
 
-  ImagePickerRepositoryImpl({
-    required ImagePickerDataSource dataSource,
-  }) : _dataSource = dataSource;
+  const ImagePickerRepositoryImpl({
+    required this._dataSource,
+  });
 
   @override
   Future<SelectedImageEntity?> pickImage(ImagePickSource source) async {
@@ -18,10 +16,8 @@ class ImagePickerRepositoryImpl implements ImagePickerRepository {
 
     if (pickedFile == null) return null;
 
-    final bytes = await pickedFile.readAsBytes();
-
     return SelectedImageEntity(
-      bytes: bytes,
+      bytes: await pickedFile.readAsBytes(),
       fileName: pickedFile.name,
     );
   }

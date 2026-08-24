@@ -12,7 +12,20 @@
           "package_name": "com.example.fitlens"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "802368686218-ng7dvv98kg84o90bv2dhqrontlrab3bt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitlens",
+            "certificate_hash": "b217073df649841a9509e767ddd2ec8f4db37a11"
+          }
+        },
+        {
+          "client_id": "802368686218-11h2kjuui8rpmtf4ksmt5oneogn4o45e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDl15ewh1mCfGBCHlh4SLyGlIyJHStImWI"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802368686218-11h2kjuui8rpmtf4ksmt5oneogn4o45e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "802368686218-9fv1u2tbc23oj8k48nimf6n4iof9uma2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitlens"
+              }
+            }
+          ]
         }
       }
     }

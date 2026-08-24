@@ -1,0 +1,7 @@
+flutter_native_splash:
+  color: "#FFF8F8"
+  # To avoid a jarring pop, we don't put an image in the native splash.
+  # The native splash will just be a solid color, which then transitions 
+  # to the Flutter splash_screen.dart which animates the logo in.
+  android_12:
+    color: "#FFF8F8"

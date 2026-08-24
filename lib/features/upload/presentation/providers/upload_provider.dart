@@ -39,26 +39,28 @@ Provider<PickImageUseCase>((ref) {
 // ================================
 
 class UploadState {
-  final SelectedImageEntity? selectedImage;
+  final SelectedImageEntity? userImage;
+  final SelectedImageEntity? clothingImage;
   final String? errorMessage;
 
   const UploadState({
-    this.selectedImage,
+    this.userImage,
+    this.clothingImage,
     this.errorMessage,
   });
 
-
   UploadState copyWith({
-    SelectedImageEntity? selectedImage,
+    SelectedImageEntity? userImage,
+    SelectedImageEntity? clothingImage,
     String? errorMessage,
+    bool clearUserImage = false,
+    bool clearClothingImage = false,
     bool clearError = false,
   }) {
     return UploadState(
-      selectedImage:
-      selectedImage ?? this.selectedImage,
-
-      errorMessage:
-      clearError ? null : (errorMessage ?? this.errorMessage),
+      userImage: clearUserImage ? null : (userImage ?? this.userImage),
+      clothingImage: clearClothingImage ? null : (clothingImage ?? this.clothingImage),
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }
 }
@@ -78,46 +80,50 @@ class UploadController extends Notifier<UploadState> {
   }
 
 
-  Future<void> pickImage(
-      ImagePickSource source) async {
-
+  Future<void> pickUserImage(ImagePickSource source) async {
     try {
-
-      final pickImage =
-      ref.read(pickImageUseCaseProvider);
-
-
-      final image =
-      await pickImage(source);
-
-
-      if (image == null) {
-        return;
-      }
-
+      final pickImage = ref.read(pickImageUseCaseProvider);
+      final image = await pickImage(source);
+      if (image == null) return;
 
       state = state.copyWith(
-        selectedImage: image,
+        userImage: image,
         clearError: true,
       );
-
-
     } catch (e) {
-
       state = state.copyWith(
-        errorMessage:
-        'Could not pick image. Please try again.',
+        errorMessage: 'Could not pick user image. Please try again.',
       );
-
     }
   }
 
+  Future<void> pickClothingImage(ImagePickSource source) async {
+    try {
+      final pickImage = ref.read(pickImageUseCaseProvider);
+      final image = await pickImage(source);
+      if (image == null) return;
 
+      state = state.copyWith(
+        clothingImage: image,
+        clearError: true,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        errorMessage: 'Could not pick clothing image. Please try again.',
+      );
+    }
+  }
 
-  void clearSelection() {
+  void clearUserImage() {
+    state = state.copyWith(clearUserImage: true, clearError: true);
+  }
+  
+  void clearClothingImage() {
+    state = state.copyWith(clearClothingImage: true, clearError: true);
+  }
 
+  void clearAll() {
     state = const UploadState();
-
   }
 
 }
